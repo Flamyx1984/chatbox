@@ -3,6 +3,9 @@ import { Context } from "./Context";
 
 export default function Messages(props) {
   const { messages } = useContext(Context);
+  
+  const messageElements= messages.map((msg) => renderMessage(msg))
+  
   function renderMessage(msg) {
     const { member, data, timestamp } = msg;
 
@@ -18,7 +21,7 @@ export default function Messages(props) {
     );
   }
 
-  return (
-    <div className="msg-list">{messages.map((msg) => renderMessage(msg))}</div>
+  return ( 
+    <div className="msg-list">{messageElements}</div>
   );
 }

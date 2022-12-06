@@ -33,10 +33,8 @@ export default function App() {
       const room = drone.subscribe("observable-room");
 
       room.on("message", (message) => {
-        const { data, member, timestamp, id } = message;
-
         setMessages((prevMsg) => {
-          return [...prevMsg, { data, member, timestamp, id }];
+          return [...prevMsg, message];
         });
       });
       room.on("members", function (members) {
@@ -46,11 +44,13 @@ export default function App() {
         setMembersArray((prevArray) => {
           return [...prevArray, member];
         });
+        newMember(member);
       });
       room.on("member_leave", function (member) {
         setMembersArray((current) => {
           return current.filter((oneMember) => oneMember.id !== member.id);
         });
+        leftMember(member);
       });
     });
   }
@@ -58,11 +58,27 @@ export default function App() {
   function play() {
     new Audio(sound).play();
   }
-
-  return user.username === "" ? (
+  function newMember(member) {
+    let novak = `New member is: ${member.clientData.username}${member.clientData.avatar} `;
+    document.getElementById("novi").innerHTML = novak;
+    setTimeout(() => {
+      let novak = "";
+      document.getElementById("novi").innerHTML = novak;
+    }, 5000);
+  }
+  function leftMember(member) {
+    let otisao = `Has left the chat: ${member.clientData.username}${member.clientData.avatar} `;
+    document.getElementById("novi").innerHTML = otisao;
+    setTimeout(() => {
+      let otisao = "";
+      document.getElementById("novi").innerHTML = otisao;
+    }, 5000);
+  }
+  return !user.username  ? (
     <Registration />
   ) : (
     <div className="all">
+      <span id="novi" className="spantxt"></span>
       <div>
         <MembersList className="member-list" />
       </div>
